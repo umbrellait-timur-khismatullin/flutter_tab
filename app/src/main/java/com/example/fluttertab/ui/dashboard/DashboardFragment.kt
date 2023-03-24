@@ -4,17 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import com.example.fluttertab.R
 import com.example.fluttertab.databinding.FragmentDashboardBinding
+import io.flutter.embedding.android.FlutterFragment
 
 class DashboardFragment : Fragment() {
 
+    companion object {
+        private const val TAG_FLUTTER_FRAGMENT = "flutter_fragment"
+    }
+
     private var _binding: FragmentDashboardBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,17 +24,16 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
+        parentFragmentManager
+            .beginTransaction()
+            .add(
+                R.id.fragmentContainerView,
+                FlutterFragment.withCachedEngine("my_engine_id").build<FlutterFragment>(),
+                TAG_FLUTTER_FRAGMENT
+            )
+            .commit()
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {
