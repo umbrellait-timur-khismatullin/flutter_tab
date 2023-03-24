@@ -37,7 +37,6 @@ xcuserdata
 Icon?
 .tags*
 
-build/
 .ios/
 .flutter-plugins
 .flutter-plugins-dependencies
